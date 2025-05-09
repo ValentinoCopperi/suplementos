@@ -294,14 +294,7 @@ export default function CatalogoSuplementos() {
         doc.text(`Tel: ${contactInfo.phone} | Email: ${contactInfo.email}`, pageWidth - 15, 10, { align: "right" })
         doc.text(`Web: ${url}`, pageWidth - 15, 17, { align: "right" })
 
-        // Fecha de generación
-        const fecha = new Date().toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })
-        doc.setFontSize(8)
-        doc.text(`Generado el: ${fecha}`, pageWidth - 15, 23, { align: "right" })
+        
       }
 
       // Función para agregar pie de página
