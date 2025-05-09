@@ -338,7 +338,7 @@ export default function CatalogoSuplementos() {
       const filasPorPagina = Math.floor((pageHeight - margenSuperior - 15) / altoFila)
 
       // Calcular número total de páginas
-      const totalPaginas = Math.ceil((suplementos.length + 1) / filasPorPagina)
+      const totalPaginas = Math.ceil((suplementosFiltrados.length + 1) / filasPorPagina)
 
       // Agregar primera página
       agregarEncabezado()
@@ -597,7 +597,7 @@ export default function CatalogoSuplementos() {
       }
 
       // Agregar pie de página en la última página
-      agregarPieDePagina(paginaActual, 14)
+      agregarPieDePagina(paginaActual, totalPaginas)
 
       // Guardar PDF
       doc.save("catalogo-suplementos.pdf")
@@ -610,12 +610,12 @@ export default function CatalogoSuplementos() {
 
   // Componente de filtros que se usa tanto en mobile como en desktop
   const FiltersComponent = () => (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-3 w-full px-4">
       {/* Marcas */}
       <div className="w-full">
-        <h3 className="text-lg font-medium mb-3 text-green-800 dark:text-green-400">Marca</h3>
+        <h3 className="text-lg font-medium mb-2 text-green-800 dark:text-green-400">Marca</h3>
         <Tabs value={marcaSeleccionada} onValueChange={handleMarcaChange} className="w-full">
-          <TabsList className="w-full grid grid-cols-1 md:grid-cols-4 h-auto bg-white dark:bg-green-950 p-2 rounded-lg">
+          <TabsList className="w-full grid grid-cols-2 md:grid-cols-4 h-auto bg-white dark:bg-green-950 p-2 gap-2 rounded-lg">
             {marcas.map((marca) => (
               <TabsTrigger
                 key={marca.value}
@@ -631,11 +631,11 @@ export default function CatalogoSuplementos() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center gap-6 ">
-        <div className="flex-1 min-w-[250px]">
-          <h3 className="text-lg font-medium mb-3 text-green-800 dark:text-green-400">Categoría</h3>
+      <div className="flex flex-col gap-8">
+        <div className="w-full">
+          <h3 className="text-lg font-medium mb-4 text-green-800 dark:text-green-400">Categoría</h3>
           <Select value={categoriaSeleccionada} onValueChange={(value: any) => setCategoriaSeleccionada(value)}>
-            <SelectTrigger className="border-green-200 py-6 text-lg">
+            <SelectTrigger className="border-green-200 py-3 text-lg">
               <SelectValue placeholder="Seleccionar categoría" />
             </SelectTrigger>
             <SelectContent>
@@ -651,10 +651,10 @@ export default function CatalogoSuplementos() {
         </div>
 
         {/* Ordenar por precio */}
-        <div className="flex-1 min-w-[250px]">
-          <h3 className="text-lg font-medium mb-3 text-green-800 dark:text-green-400">Ordenar por precio</h3>
+        <div className="w-full">
+          <h3 className="text-lg font-medium mb-4 text-green-800 dark:text-green-400">Ordenar por precio</h3>
           <Select value={ordenPrecio} onValueChange={setOrdenPrecio}>
-            <SelectTrigger className="border-green-200 py-6 text-lg">
+            <SelectTrigger className="border-green-200 py-3 text-lg">
               <SelectValue placeholder="Ordenar por precio" />
             </SelectTrigger>
             <SelectContent>
@@ -671,7 +671,6 @@ export default function CatalogoSuplementos() {
           </Select>
         </div>
       </div>
-      {/* Categoría */}
     </div>
   )
 
@@ -734,9 +733,12 @@ export default function CatalogoSuplementos() {
                         Filtros
                       </Button>
                     </SheetTrigger>
-                    <SheetContent className="w-[90%]">
-                      <div className="grid gap-6 py-6">
-                        <FiltersComponent />
+                    <SheetContent className="w-[90%] overflow-y-auto">
+                      <div className="py-6">
+                        <h2 className="text-xl font-bold mb-6 text-green-800 dark:text-green-400">Filtros</h2>
+                        <div className="space-y-8">
+                          <FiltersComponent />
+                        </div>
                       </div>
                     </SheetContent>
                   </Sheet>
