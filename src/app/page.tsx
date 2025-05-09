@@ -329,7 +329,7 @@ export default function CatalogoSuplementos() {
       const filasPorPagina = Math.floor((pageHeight - margenSuperior - 15) / altoFila)
 
       // Calcular número total de páginas
-      const totalPaginas = Math.ceil((suplementosFiltrados.length + 1) / filasPorPagina)
+      const totalPaginas = Math.ceil((suplementos.length + 1) / filasPorPagina)
 
       // Agregar primera página
       agregarEncabezado()
