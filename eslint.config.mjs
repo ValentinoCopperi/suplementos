@@ -7,30 +7,18 @@ const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-  rules: {
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-empty-object-type": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-empty-object-type": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-empty-object-type": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    //any
-    "@typescript-eslint/no-explicit-any": "off",
-    //no-unused-vars
-    "@typescript-eslint/no-unused-vars": "off",
-    //no-empty-object-type
-    "@typescript-eslint/no-empty-object-type": "off",
-    //no-empty-interface
-    "@typescript-eslint/no-empty-interface": "off",
-    
-  },
 });
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-interface": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
