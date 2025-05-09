@@ -114,8 +114,11 @@ export default function CatalogoSuplementos() {
   const suplementosFiltrados = suplementos
     .filter(
       (suplemento) =>
+        //Buscar por marca,categoria,sabor,producto
         suplemento.product.toLowerCase().includes(busqueda.toLowerCase()) ||
-        suplemento.flavors.some((sabor) => sabor.toLowerCase().includes(busqueda.toLowerCase())),
+        suplemento.flavors.some((sabor) => sabor.toLowerCase().includes(busqueda.toLowerCase())) ||
+        suplemento.brand.toLowerCase().includes(busqueda.toLowerCase()) ||
+        suplemento.categoria.toLowerCase().includes(busqueda.toLowerCase()),
     )
     .filter((suplemento) => categoriaSeleccionada === "todos" || suplemento.categoria === categoriaSeleccionada)
     .filter((suplemento) => marcaSeleccionada === "todos" || suplemento.brand === marcaSeleccionada)
