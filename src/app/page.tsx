@@ -30,7 +30,7 @@ import { obtenerTodosLosSuplementos, marcas, categorias, type CATEOGORIAS } from
 import Image from "next/image"
 import Link from "next/link"
 
-const url = "https://suplementosfitness.vercel.app"
+const url = "https://catalago-suplementos.vercel.app/"
 
 // Custom styles for the table
 const tableStyles = `
