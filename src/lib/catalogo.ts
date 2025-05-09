@@ -50,6 +50,7 @@ export const categorias = [
   "colageno",
   "barras",
   "carbohidratos",
+  "energia",
 ]
 
 export type CATEOGORIAS =
@@ -62,8 +63,8 @@ export type CATEOGORIAS =
   | "quemadores"
   | "vitaminas"
   | "colageno"
-  | "carbohidratos"
   | "barras"
+  | "carbohidratos"
   | "energia";
 
 const catalogoData: CatalogoData = {
@@ -685,7 +686,7 @@ const catalogoData: CatalogoData = {
       descripcion:
         "Gel Mervick Repositor Energetico Aminoacidos Sabor Frutos Rojos",
       brand: "MERVICK",
-      categoria: "carbohidratos",
+      categoria: "energia",
       image: "/MERVICK/gel.webp",
     },
     {
@@ -694,7 +695,7 @@ const catalogoData: CatalogoData = {
       price: 12000,
       descripcion: "Gel Mervick Repositor Energetico sin cafeina",
       brand: "MERVICK",
-      categoria: "carbohidratos",
+      categoria: "energia",
       image: "/MERVICK/gel-sin-cafeina.webp",
     },
     {

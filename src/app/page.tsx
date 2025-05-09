@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react"
 import {
   Download,
-  Filter,
   Search,
   Dumbbell,
   Zap,
@@ -24,7 +23,6 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { jsPDF } from "jspdf"
@@ -32,7 +30,7 @@ import { obtenerTodosLosSuplementos, marcas, categorias, type CATEOGORIAS } from
 import Image from "next/image"
 import Link from "next/link"
 
-const url = "https://catalago-suplementos.vercel.app/"
+const url = "https://suplementosfitness.vercel.app"
 
 // Custom styles for the table
 const tableStyles = `
@@ -394,8 +392,15 @@ export default function CatalogoSuplementos() {
       // Dibujar filas de datos
       let paginaActual = 1
 
-      for (let i = 0; i < suplementos.length; i++) {
-        const suplemento = suplementos[i]
+      const suplementosOrdenados = suplementos.sort((a, b) => {
+        const categoriaA = a.categoria
+        const categoriaB = b.categoria
+        const ordenCategoria = ["proteina", "creatina", "aminoacidos", "pre-entreno", "quemadores", "vitaminas", "colageno", "ganador", "carbohidratos", "barras","energia"]
+        return ordenCategoria.indexOf(categoriaA) - ordenCategoria.indexOf(categoriaB)
+      })
+
+      for (let i = 0; i < suplementosOrdenados.length; i++) {
+        const suplemento = suplementosOrdenados[i]
         const saboresGrupos = dividirSabores(suplemento.flavors)
         const altoFilaActual = altoFila // Altura fija para todas las filas
 
@@ -608,14 +613,81 @@ export default function CatalogoSuplementos() {
     }
   }
 
-  // Componente de filtros que se usa tanto en mobile como en desktop
-  const FiltersComponent = () => (
-    <div className="flex flex-col gap-3 w-full px-4">
+  // Componente de filtros para móvil (compacto)
+  const MobileFiltersComponent = () => (
+    <div className="w-full space-y-4 bg-white dark:bg-green-950 p-4 rounded-lg border border-green-200 dark:border-green-800 shadow-sm">
+      {/* Marcas en formato compacto */}
+      <div className="w-full">
+        <h3 className="text-sm font-medium mb-2 text-green-800 dark:text-green-400">Marca</h3>
+        <div className="flex flex-wrap gap-1.5">
+          {marcas.map((marca) => (
+            <Badge
+              key={marca.value}
+              variant={marcaSeleccionada === marca.value ? "default" : "outline"}
+              className={`cursor-pointer py-1 px-2 ${
+                marcaSeleccionada === marca.value
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "border-green-300 hover:bg-green-100"
+              }`}
+              onClick={() => handleMarcaChange(marca.value)}
+            >
+              {marca.name}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      {/* Categoría y Ordenar en formato compacto */}
+      <div className="flex gap-2">
+        <div className="flex-1">
+          <h3 className="text-sm font-medium mb-2 text-green-800 dark:text-green-400">Categoría</h3>
+          <Select value={categoriaSeleccionada} onValueChange={(value: any) => setCategoriaSeleccionada(value)}>
+            <SelectTrigger className="border-green-200 py-1 text-sm h-9">
+              <SelectValue placeholder="Categoría" />
+            </SelectTrigger>
+            <SelectContent>
+              {categorias.map((categoria) => (
+                <SelectItem key={categoria} value={categoria} className="text-sm py-1.5">
+                  {categoria === "todos"
+                    ? "Todas las categorías"
+                    : categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex-1">
+          <h3 className="text-sm font-medium mb-2 text-green-800 dark:text-green-400">Ordenar</h3>
+          <Select value={ordenPrecio} onValueChange={setOrdenPrecio}>
+            <SelectTrigger className="border-green-200 py-1 text-sm h-9">
+              <SelectValue placeholder="Ordenar" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ninguno" className="text-sm py-1.5">
+                Sin ordenar
+              </SelectItem>
+              <SelectItem value="ascendente" className="text-sm py-1.5">
+                Menor a mayor
+              </SelectItem>
+              <SelectItem value="descendente" className="text-sm py-1.5">
+                Mayor a menor
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Componente de filtros para desktop
+  const DesktopFiltersComponent = () => (
+    <div className="flex flex-col gap-8 w-full">
       {/* Marcas */}
       <div className="w-full">
-        <h3 className="text-lg font-medium mb-2 text-green-800 dark:text-green-400">Marca</h3>
+        <h3 className="text-lg font-medium mb-4 text-green-800 dark:text-green-400">Marca</h3>
         <Tabs value={marcaSeleccionada} onValueChange={handleMarcaChange} className="w-full">
-          <TabsList className="w-full grid grid-cols-2 md:grid-cols-4 h-auto bg-white dark:bg-green-950 p-2 gap-2 rounded-lg">
+          <TabsList className="w-full grid grid-cols-4 h-auto bg-white dark:bg-green-950 p-2 gap-2 rounded-lg">
             {marcas.map((marca) => (
               <TabsTrigger
                 key={marca.value}
@@ -631,11 +703,13 @@ export default function CatalogoSuplementos() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex flex-col gap-8">
+
+      {/* Categoría y Ordenar en formato flex-col para desktop */}
+      <div className="flex flex-col gap-6">
         <div className="w-full">
           <h3 className="text-lg font-medium mb-4 text-green-800 dark:text-green-400">Categoría</h3>
           <Select value={categoriaSeleccionada} onValueChange={(value: any) => setCategoriaSeleccionada(value)}>
-            <SelectTrigger className="border-green-200 py-3 text-lg">
+            <SelectTrigger className="border-green-200 py-6 text-lg">
               <SelectValue placeholder="Seleccionar categoría" />
             </SelectTrigger>
             <SelectContent>
@@ -654,7 +728,7 @@ export default function CatalogoSuplementos() {
         <div className="w-full">
           <h3 className="text-lg font-medium mb-4 text-green-800 dark:text-green-400">Ordenar por precio</h3>
           <Select value={ordenPrecio} onValueChange={setOrdenPrecio}>
-            <SelectTrigger className="border-green-200 py-3 text-lg">
+            <SelectTrigger className="border-green-200 py-6 text-lg">
               <SelectValue placeholder="Ordenar por precio" />
             </SelectTrigger>
             <SelectContent>
@@ -721,29 +795,6 @@ export default function CatalogoSuplementos() {
               </div>
 
               <div className="flex gap-2">
-                {/* Filtros en móvil */}
-                {isMobile && (
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="flex gap-2 border-green-200 hover:bg-green-100 py-6 px-5 text-lg rounded-lg"
-                      >
-                        <Filter className="h-5 w-5" />
-                        Filtros
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent className="w-[90%] overflow-y-auto">
-                      <div className="py-6">
-                        <h2 className="text-xl font-bold mb-6 text-green-800 dark:text-green-400">Filtros</h2>
-                        <div className="space-y-8">
-                          <FiltersComponent />
-                        </div>
-                      </div>
-                    </SheetContent>
-                  </Sheet>
-                )}
-
                 <Button
                   onClick={generarPDF}
                   className="flex gap-2 bg-green-600 hover:bg-green-700 py-6 px-5 text-lg rounded-lg"
@@ -761,10 +812,13 @@ export default function CatalogoSuplementos() {
               </div>
             </div>
 
+            {/* Filtros visibles en mobile */}
+            {isMobile && <MobileFiltersComponent />}
+
             {/* Filtros visibles en desktop */}
             {!isMobile && (
               <div className="flex flex-wrap gap-6 p-6 bg-white dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800 shadow-md">
-                <FiltersComponent />
+                <DesktopFiltersComponent />
               </div>
             )}
           </div>
