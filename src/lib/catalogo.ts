@@ -315,7 +315,7 @@ const catalogoData: CatalogoData = {
     {
       product: "WHEY PROTEIN 2LBS",
       descripcion: "Whey Protein 2lbs (907g)proteina Whey Isolate Star",
-      image: "/STAR/whey-doypack.webp",
+      image: "/STAR/whey-1kg.webp",
       flavors: ["BANANA", "CHOCOLATE", "COOKIES", "FRUTILLA", "VAINILLA"],
       price: 36900,
       brand: "STAR",
